@@ -1,8 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { Doctor } from 'src/classes/doctor';
 
 @Injectable()
 export class DoctorsService {
+    private readonly logger = new Logger(DoctorsService.name)
     private readonly doctors: Doctor[] = [
         {
             id: 1,
@@ -20,6 +21,7 @@ export class DoctorsService {
         }
     ]
     findAll(): Doctor[] {
+        this.logger.log('Getting doctors')
         return this.doctors;
     }
 }
