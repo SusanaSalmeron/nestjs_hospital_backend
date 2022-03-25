@@ -5,6 +5,6 @@ import { CatalogController } from 'src/controllers/catalog/catalog.controller';
 
 @Module({
     providers: [DiseasesService, DoctorsService],
-    controllers: [CatalogController]
+    controllers: [CatalogController],
 })
 export class CatalogModule { }
