@@ -1,14 +1,18 @@
 import { Controller, Get, Query, Param } from '@nestjs/common';
+import { ApiQuery } from '@nestjs/swagger';
 import { Patient } from 'src/classes/patient';
+import { Appointment } from 'src/classes/appointment';
+import { Record } from 'src/classes/record';
 import { PatientsService } from 'src/services/patients.service';
 import { AppointmentsService } from 'src/services/appointments.service';
-import { ApiQuery } from '@nestjs/swagger';
-import { Appointment } from 'src/classes/appointment';
+import { RecordsService } from 'src/services/records.service';
+
+
 
 
 @Controller('patients')
 export class PatientsController {
-    constructor(private patientService: PatientsService, private appointmentService: AppointmentsService) { }
+    constructor(private patientService: PatientsService, private appointmentsService: AppointmentsService, private recordsService: RecordsService) { }
 
     @Get('/')
     @ApiQuery({
@@ -26,6 +30,11 @@ export class PatientsController {
 
     @Get('/:id/appointments')
     async getAppointmentsByPatient(@Param('id') id: string): Promise<Appointment[]> {
-        return await this.appointmentService.findAppointmentsByPatient(id)
+        return await this.appointmentsService.findAppointmentsByPatient(id)
+    }
+
+    @Get('/:id/records')
+    async getRecordsByPatient(@Param('id') id: string): Promise<Record[]> {
+        return await this.recordsService.findRecordsByPatient(id)
     }
 }

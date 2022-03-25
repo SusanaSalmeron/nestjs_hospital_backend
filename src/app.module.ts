@@ -10,10 +10,12 @@ import { PatientsModule } from './modules/patients.module';
 import { PatientsService } from './services/patients.service';
 import { PatientsController } from './controllers/patients/patients.controller';
 import { AppointmentsService } from './services/appointments.service';
+import { RecordsService } from './services/records.service';
+import { DoctorsController } from './controllers/doctors/doctors.controller';
 
 @Module({
   imports: [CatalogModule, PatientsModule],
-  controllers: [AppController, CatalogController, PatientsController],
-  providers: [AppService, UsersService, DiseasesService, DoctorsService, PatientsService, AppointmentsService],
+  controllers: [AppController, CatalogController, PatientsController, DoctorsController],
+  providers: [AppService, UsersService, DiseasesService, DoctorsService, PatientsService, AppointmentsService, RecordsService],
 })
 export class AppModule { }

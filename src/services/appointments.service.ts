@@ -30,6 +30,16 @@ export class AppointmentsService {
         }
         return appointments
     }
+    async findAppointmentsFromDoctor(id: string): Promise<Appointment[]> {
+        this.logger.log(`Searching doctors with id: ${id}`)
+        const appointments = this.appointments.filter(app => app.doctorId.toString() === id)
+        if (appointments) {
+            this.logger.log(`Showing appointments from doctor ${id}`)
+        } else {
+            this.logger.log(`The doctor ${id} has no appointments `)
+        }
+        return appointments
+    }
 }
 
 
