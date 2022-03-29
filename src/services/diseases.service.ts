@@ -1,18 +1,14 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
+import * as loki from 'lokijs'
 
 @Injectable()
 export class DiseasesService {
     private readonly logger = new Logger(DiseasesService.name);
-    private readonly diseases: string[] = [
-        'Alphaviruses',
-        'Alzheimer Diseases',
-        'Arthritis',
-        'Babesiosis',
-        'Cancer - Breast',
-    ];
+    constructor(@Inject('DATABASE_CONNECTION') private db: loki) { }
 
-    findAll() {
+    async findAll(): Promise<string[]> {
         this.logger.log('Getting diseases')
-        return this.diseases;
+        const diseasesTable = this.db.getCollection('diseases')
+        return diseasesTable.find(true)
     }
 }

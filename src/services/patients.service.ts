@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { Patient } from 'src/classes/patient';
+import { Patient } from 'src/classes/patient.model';
 
 @Injectable()
 export class PatientsService {

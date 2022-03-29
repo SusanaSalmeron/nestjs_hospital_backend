@@ -1,27 +1,25 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { Doctor } from 'src/classes/doctor';
+import * as loki from 'lokijs'
 
 @Injectable()
 export class DoctorsService {
     private readonly logger = new Logger(DoctorsService.name)
-    private readonly doctors: Doctor[] = [
-        {
-            id: 1,
-            name: "Karly Sosa",
-            email: "velit.eu.sem@ipsum.co.uk",
-            speciality: "gynecology",
-            photo: "https://images.pexels.com/photos/7580257/pexels-photo-7580257.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
-        },
-        {
-            id: 2,
-            name: "Indigo Trevino",
-            email: "nec.eleifend@tempuslorem.net",
-            speciality: "surgery",
-            photo: "https://images.pexels.com/photos/6303556/pexels-photo-6303556.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
-        }
-    ]
-    findAll(): Doctor[] {
+    constructor(@Inject('DATABASE_CONNECTION') private db: loki) { }
+
+    async findAll(): Promise<Doctor[]> {
         this.logger.log('Getting doctors')
-        return this.doctors;
+        const doctorsTable = this.db.getCollection('doctors')
+        this.logger.debug(JSON.stringify(doctorsTable))
+        const doctors = doctorsTable.find(true)
+        return doctors.map(doctor => {
+            return new Doctor(
+                doctor.id,
+                doctor.name,
+                doctor.email,
+                doctor.speciality,
+                doctor.photo
+            )
+        })
     }
 }
