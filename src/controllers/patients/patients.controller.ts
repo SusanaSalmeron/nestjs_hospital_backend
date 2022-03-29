@@ -1,13 +1,11 @@
 import { Controller, Get, Query, Param } from '@nestjs/common';
 import { ApiQuery } from '@nestjs/swagger';
-import { Patient } from 'src/classes/patient';
+import { Patient } from 'src/classes/patient.model';
 import { Appointment } from 'src/classes/appointment';
 import { Record } from 'src/classes/record';
 import { PatientsService } from 'src/services/patients.service';
 import { AppointmentsService } from 'src/services/appointments.service';
 import { RecordsService } from 'src/services/records.service';
-
-
 
 
 @Controller('patients')

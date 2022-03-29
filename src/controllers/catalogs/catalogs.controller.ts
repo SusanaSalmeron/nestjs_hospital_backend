@@ -3,7 +3,7 @@ import { DiseasesService } from 'src/services/diseases.service';
 import { DoctorsService } from 'src/services/doctors.service';
 import { Doctor } from 'src/classes/doctor';
 
-@Controller('catalog')
+@Controller('catalogs')
 export class CatalogController {
     constructor(private diseasesService: DiseasesService, private doctorsService: DoctorsService) { }
 
