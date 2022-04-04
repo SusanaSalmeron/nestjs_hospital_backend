@@ -2,6 +2,7 @@ import { Inject, Injectable, Logger } from '@nestjs/common';
 import { Appointment } from 'src/classes/appointment';
 import { DoctorAppointment } from 'src/classes/doctorAppointment'
 import * as loki from 'lokijs'
+import { Patient } from 'src/classes/patient.model';
 
 
 @Injectable()
@@ -11,25 +12,30 @@ export class AppointmentsService {
 
     async findAppointmentsByPatient(id: string): Promise<Appointment[]> {
         this.logger.debug(`Searching patient with id : ${id}`)
-        let appoints: any[] = []
-        const appointmentsTable = this.db.getCollection('appointments')
-        const doctorsTable = this.db.getCollection('doctors')
+        const patientsTable = this.db.getCollection('patients')
         try {
-            if (appoints) {
-                this.logger.log(`Showing appointments from patient ${id}`)
-                appoints = appointmentsTable.find({ patientId: { '$eq': parseInt(id) } })
-                return appoints.map(app => {
-                    const doc = doctorsTable.findOne({ id: app.doctorId })
-                    return new Appointment(
-                        app.id,
-                        app.pickedDate,
-                        doc.name,
-                        doc.id
-                    )
-                })
-            } else {
-                this.logger.log(`The doctor ${id} has no appointments `)
+            const patient: Patient = patientsTable.findOne({ id: { '$eq': parseInt(id) } })
+            if (!patient) {
+                this.logger.log(`Patient id ${id} doesn't exist`)
+                return null;
             }
+            this.logger.log(`Fetching appointments from patient ${id}`)
+            const appointmentsTable = this.db.getCollection('appointments')
+            const doctorsTable = this.db.getCollection('doctors')
+            const appoints: any[] = appointmentsTable.find({ patientId: { '$eq': parseInt(id) } })
+            if (appoints.length === 0) {
+                this.logger.log(`The patient ${id} has no appointments `)
+            }
+            return appoints.map(app => {
+                //TODO es posible que no existe el doctor?
+                const doc = doctorsTable.findOne({ id: app.doctorId })
+                return new Appointment(
+                    app.id,
+                    app.pickedDate,
+                    doc.name,
+                    doc.id
+                )
+            })
         } catch (err) {
             console.log(err)
         }

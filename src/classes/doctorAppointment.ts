@@ -1,8 +1,15 @@
+import { ApiProperty } from "@nestjs/swagger";
+
 export class DoctorAppointment {
+    @ApiProperty()
     id: number;
+    @ApiProperty()
     doctorId: number;
+    @ApiProperty()
     patientId: number;
+    @ApiProperty()
     patientName: string;
+    @ApiProperty()
     pickedDate: string;
 
     constructor(id, doctorId, patientId, patientName, pickedDate) {
