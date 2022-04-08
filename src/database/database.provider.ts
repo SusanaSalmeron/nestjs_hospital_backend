@@ -1,7 +1,6 @@
 import * as loki from 'lokijs';
 import * as fs from 'fs';
 import * as path from 'path';
-/* import { Logger } from '@nestjs/common'; */
 
 export const databaseProviders = [
     {

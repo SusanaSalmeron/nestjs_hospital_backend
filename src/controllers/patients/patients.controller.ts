@@ -1,11 +1,15 @@
-import { Controller, Get, Query, Param, Res, Logger, HttpStatus } from '@nestjs/common';
-import { ApiQuery, ApiNotFoundResponse, ApiOkResponse, ApiInternalServerErrorResponse } from '@nestjs/swagger';
+import { Controller, Get, Query, Param, Res, Req, Logger, HttpStatus, Post, Body, Delete } from '@nestjs/common';
+import { ApiQuery, ApiNotFoundResponse, ApiOkResponse, ApiInternalServerErrorResponse, ApiCreatedResponse, ApiBody, ApiForbiddenResponse } from '@nestjs/swagger';
 import { Patient } from 'src/classes/patient.model';
 import { Record } from 'src/classes/record';
 import { PatientsService } from 'src/services/patients.service';
 import { AppointmentsService } from 'src/services/appointments.service';
 import { RecordsService } from 'src/services/records.service';
+import { CreateAppointmentDto } from 'src/dto/createAppointmentDto';
+import { DeleteAppointDto } from 'src/dto/deleteAppointDto';
+import { CreateRecordDto } from 'src/dto/createRecordDto';
 import { Appointment } from 'src/classes/appointment';
+
 
 
 @Controller('patients')
@@ -87,26 +91,105 @@ export class PatientsController {
         }
     }
 
+    @Post('/:id/appointments')
+    @ApiBody({
+        description: 'Appointment',
+        required: true,
+        type: CreateAppointmentDto
+    })
+    @ApiCreatedResponse({ description: "Appointment Created" })
+    @ApiNotFoundResponse({ description: "Patient Not Found" })
+    @ApiInternalServerErrorResponse({ description: "Internal Server Error" })
+    async addAppointment(@Param('id') id: string, @Res() response, @Body() createAppDto: CreateAppointmentDto) {
+        try {
+            const appointmentId = await this.appointmentsService.createNewAppointment(id, createAppDto)
+            if (appointmentId) {
+                this.logger.log('Appointment added successfully')
+                response.status(HttpStatus.CREATED).send()
+            } else {
+                this.logger.error('No Appointment')
+                response.status(HttpStatus.NOT_FOUND).json({ error: 'The patient id or the doctor id does not exists' })
+            }
+        } catch (err) {
+            this.logger.error('Internal Server Error', err)
+            response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: "Internal Error" })
+        }
+    }
+
+    @Delete('/:id/appointments/:appId')
+    @ApiOkResponse({
+        description: 'Appointment deleted successfully',
+    })
+    @ApiNotFoundResponse({ description: 'Appointment does not exists' })
+    @ApiInternalServerErrorResponse({ description: 'Internal Server Error' })
+    async eraseAppointment(@Param() deleteAppointDto: DeleteAppointDto, @Res() response) {
+        try {
+            const appointmentDeleted = await this.appointmentsService.deleteAppointment(deleteAppointDto)
+            if (appointmentDeleted) {
+                this.logger.log('Appointment deleted successfully')
+                response.status(HttpStatus.OK).send()
+            } else {
+                this.logger.error('Appointment does not exists')
+                response.status(HttpStatus.NOT_FOUND).json({ error: 'Appointment does not exists' })
+            }
+        } catch (err) {
+            this.logger.error('Internal Server Error')
+            response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: 'Internal Server Error' })
+        }
+    }
+
     @Get('/:id/records')
     @ApiOkResponse({
         description: 'Find records successfully',
         type: Record
     })
-    @ApiNotFoundResponse({ description: 'Record not found' })
+    @ApiNotFoundResponse({ description: 'Not found' })
     @ApiInternalServerErrorResponse({ description: 'Internal Server Error' })
     async getRecordsByPatient(@Param('id') id: string, @Res() response) {
         try {
-            const records = await this.recordsService.findRecordsByPatient(id)
-            if (records.length) {
+            const clinicalRecords = await this.recordsService.findRecordsByPatient(id)
+            if (clinicalRecords) {
                 this.logger.debug('Records find successfully')
-                response.status(HttpStatus.OK).json(records)
+                response.status(HttpStatus.OK).json(clinicalRecords)
             } else {
-                this.logger.error('Records not found')
-                response.status(HttpStatus.NOT_FOUND).send('Records not found')
+                this.logger.error('Not found')
+                response.status(HttpStatus.NOT_FOUND).json({ result: null })
             }
         } catch (err) {
-            this.logger.error('Internal Server Error')
+            this.logger.error('Internal Server Error', err)
             response.status(HttpStatus.INTERNAL_SERVER_ERROR).send('Internal Server Error')
+        }
+    }
+
+    //TODO - Autenticate Token and authorize doctor pending
+    @Post('/:id/records')
+    @ApiBody({
+        description: 'Record',
+        required: true,
+        type: CreateRecordDto
+    })
+    @ApiOkResponse({ description: 'New record create successfully' })
+    @ApiNotFoundResponse({ description: 'Patient not found' })
+    @ApiInternalServerErrorResponse({ description: '' })
+    @ApiForbiddenResponse({ description: "Current role is not authorized" })
+    async createNewRecord(@Param('id') id: string, @Res() response, @Req() request, @Body() createRecordDto: CreateRecordDto) {
+        if (request.role === "sanitario") {
+            try {
+                const recordAdded = await this.recordsService.addNewRecord(id, createRecordDto)
+                if (recordAdded) {
+                    this.logger.log('Record added successfully')
+                    response.status(HttpStatus.CREATED).json(recordAdded)
+                } else {
+                    this.logger.error('Patient not found')
+                    response.status(HttpStatus.NOT_FOUND).json({ error: 'Patient not found' })
+                }
+            } catch (err) {
+                this.logger.error('Internal Server Error', err)
+                response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: "Internal Server Error" })
+            }
+        } else {
+            this.logger.error('Forbidden')
+            response.status(HttpStatus.FORBIDDEN).json({ error: "Forbidden" })
         }
     }
 }

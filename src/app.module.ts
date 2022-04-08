@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersService } from './services/users.service'
@@ -13,10 +14,14 @@ import { AppointmentsService } from './services/appointments.service';
 import { RecordsService } from './services/records.service';
 import { DoctorsController } from './controllers/doctors/doctors.controller';
 import { DatabaseModule } from './database/database.module';
+import { UsersModule } from './modules/users.module';
+import { UsersController } from './controllers/users/users.controller';
+import { TokenService } from './services/token.service';
+
 
 @Module({
-  imports: [CatalogModule, PatientsModule, DatabaseModule],
-  controllers: [AppController, CatalogController, PatientsController, DoctorsController],
-  providers: [AppService, UsersService, DiseasesService, DoctorsService, PatientsService, AppointmentsService, RecordsService],
+  imports: [ConfigModule.forRoot(), CatalogModule, PatientsModule, DatabaseModule, UsersModule],
+  controllers: [AppController, CatalogController, PatientsController, DoctorsController, UsersController],
+  providers: [AppService, UsersService, DiseasesService, DoctorsService, PatientsService, AppointmentsService, RecordsService, TokenService],
 })
 export class AppModule { }
