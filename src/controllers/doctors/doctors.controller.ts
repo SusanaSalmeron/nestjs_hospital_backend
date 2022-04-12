@@ -1,7 +1,7 @@
 import { Controller, Get, HttpStatus, Logger, Param, Res } from '@nestjs/common';
 import { DoctorAppointment } from 'src/classes/doctorAppointment';
 import { AppointmentsService } from 'src/services/appointments.service';
-import { ApiNotFoundResponse, ApiOkResponse, ApiInternalServerErrorResponse } from '@nestjs/swagger';
+import { ApiNotFoundResponse, ApiOkResponse, ApiInternalServerErrorResponse, ApiForbiddenResponse, ApiBearerAuth } from '@nestjs/swagger';
 
 
 @Controller('doctors')
@@ -10,12 +10,14 @@ export class DoctorsController {
     constructor(private appointmentsService: AppointmentsService) { }
 
     @Get('/:id/appointments')
+    @ApiBearerAuth('JWT-auth')
     @ApiOkResponse({
         description: 'Find doctor appointments successfully',
         type: DoctorAppointment
     })
     @ApiNotFoundResponse({ description: 'Doctor appointments not found' })
     @ApiInternalServerErrorResponse({ description: 'Internal Server Error' })
+    @ApiForbiddenResponse({ description: 'No token found' })
     async getAppointmentsFromDoctor(@Param('id') id: string, @Res() response): Promise<DoctorAppointment[]> {
         try {
             const doctorAppointments = await this.appointmentsService.findAppointmentsFromDoctor(id)

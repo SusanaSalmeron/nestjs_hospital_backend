@@ -9,6 +9,11 @@ export class DiseasesService {
     async findAll(): Promise<string[]> {
         this.logger.log('Getting diseases')
         const diseasesTable = this.db.getCollection('diseases')
-        return diseasesTable.find(true)
+        const diseases = diseasesTable.find(true)
+        return diseases.map(d => {
+            return {
+                name: d.name
+            }
+        })
     }
 }

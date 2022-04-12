@@ -1,5 +1,5 @@
 import { Controller, Get, Query, Param, Res, Req, Logger, HttpStatus, Post, Body, Delete } from '@nestjs/common';
-import { ApiQuery, ApiNotFoundResponse, ApiOkResponse, ApiInternalServerErrorResponse, ApiCreatedResponse, ApiBody, ApiForbiddenResponse } from '@nestjs/swagger';
+import { ApiQuery, ApiNotFoundResponse, ApiOkResponse, ApiInternalServerErrorResponse, ApiCreatedResponse, ApiBody, ApiForbiddenResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { Patient } from 'src/classes/patient.model';
 import { Record } from 'src/classes/record';
 import { PatientsService } from 'src/services/patients.service';
@@ -18,6 +18,7 @@ export class PatientsController {
     constructor(private patientService: PatientsService, private appointmentsService: AppointmentsService, private recordsService: RecordsService) { }
 
     @Get('/')
+    @ApiBearerAuth('JWT-auth')
     @ApiQuery({
         name: 'keyword',
         required: false
@@ -28,6 +29,7 @@ export class PatientsController {
     })
     @ApiNotFoundResponse({ description: 'Patients not found' })
     @ApiInternalServerErrorResponse({ description: 'Internal Server Error' })
+    @ApiForbiddenResponse({ description: 'No token found' })
     async getPatientsBy(@Query('keyword') keyword: string, @Res() response) {
         try {
             const patients = await this.patientService.findBy(keyword)
@@ -45,12 +47,14 @@ export class PatientsController {
     }
 
     @Get('/:id')
+    @ApiBearerAuth('JWT-auth')
     @ApiOkResponse({
         description: 'Find patient successfully',
         type: Patient
     })
     @ApiNotFoundResponse({ description: 'Patient not found' })
     @ApiInternalServerErrorResponse({ description: 'Internal Server Error' })
+    @ApiForbiddenResponse({ description: 'No token found' })
     async getPatientById(@Param('id') id: string, @Res() response) {
         try {
             const patient = await this.patientService.findById(id)
@@ -68,12 +72,14 @@ export class PatientsController {
     }
 
     @Get('/:id/appointments')
+    @ApiBearerAuth('JWT-auth')
     @ApiOkResponse({
         description: 'find appointments successfully',
         type: Appointment
     })
     @ApiNotFoundResponse({ description: 'appointments not found' })
     @ApiInternalServerErrorResponse({ description: 'Internal Server Error' })
+    @ApiForbiddenResponse({ description: 'No token found' })
     async getAppointmentsByPatient(@Param('id') id: string, @Res() response) {
         try {
             const appointments = await this.appointmentsService.findAppointmentsByPatient(id)
@@ -92,6 +98,7 @@ export class PatientsController {
     }
 
     @Post('/:id/appointments')
+    @ApiBearerAuth('JWT-auth')
     @ApiBody({
         description: 'Appointment',
         required: true,
@@ -100,6 +107,7 @@ export class PatientsController {
     @ApiCreatedResponse({ description: "Appointment Created" })
     @ApiNotFoundResponse({ description: "Patient Not Found" })
     @ApiInternalServerErrorResponse({ description: "Internal Server Error" })
+    @ApiForbiddenResponse({ description: 'No token found' })
     async addAppointment(@Param('id') id: string, @Res() response, @Body() createAppDto: CreateAppointmentDto) {
         try {
             const appointmentId = await this.appointmentsService.createNewAppointment(id, createAppDto)
@@ -117,11 +125,13 @@ export class PatientsController {
     }
 
     @Delete('/:id/appointments/:appId')
+    @ApiBearerAuth('JWT-auth')
     @ApiOkResponse({
         description: 'Appointment deleted successfully',
     })
     @ApiNotFoundResponse({ description: 'Appointment does not exists' })
     @ApiInternalServerErrorResponse({ description: 'Internal Server Error' })
+    @ApiForbiddenResponse({ description: 'No token found' })
     async eraseAppointment(@Param() deleteAppointDto: DeleteAppointDto, @Res() response) {
         try {
             const appointmentDeleted = await this.appointmentsService.deleteAppointment(deleteAppointDto)
@@ -139,12 +149,14 @@ export class PatientsController {
     }
 
     @Get('/:id/records')
+    @ApiBearerAuth('JWT-auth')
     @ApiOkResponse({
         description: 'Find records successfully',
         type: Record
     })
     @ApiNotFoundResponse({ description: 'Not found' })
     @ApiInternalServerErrorResponse({ description: 'Internal Server Error' })
+    @ApiForbiddenResponse({ description: 'No token found' })
     async getRecordsByPatient(@Param('id') id: string, @Res() response) {
         try {
             const clinicalRecords = await this.recordsService.findRecordsByPatient(id)
@@ -161,14 +173,15 @@ export class PatientsController {
         }
     }
 
-    //TODO - Autenticate Token and authorize doctor pending
+    //TODO -authorize doctor pending
     @Post('/:id/records')
+    @ApiBearerAuth('JWT-auth')
     @ApiBody({
         description: 'Record',
         required: true,
         type: CreateRecordDto
     })
-    @ApiOkResponse({ description: 'New record create successfully' })
+    @ApiCreatedResponse({ description: 'New record create successfully' })
     @ApiNotFoundResponse({ description: 'Patient not found' })
     @ApiInternalServerErrorResponse({ description: '' })
     @ApiForbiddenResponse({ description: "Current role is not authorized" })
@@ -177,7 +190,7 @@ export class PatientsController {
             try {
                 const recordAdded = await this.recordsService.addNewRecord(id, createRecordDto)
                 if (recordAdded) {
-                    this.logger.log('Record added successfully')
+                    this.logger.log('Record added successfully 2')
                     response.status(HttpStatus.CREATED).json(recordAdded)
                 } else {
                     this.logger.error('Patient not found')

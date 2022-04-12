@@ -2,7 +2,7 @@ import { Inject, Injectable, Logger } from '@nestjs/common';
 import { Record } from 'src/classes/record';
 import { ClinicalRecord } from 'src/classes/clinicalRecord';
 import * as loki from 'lokijs';
-import dayjs from 'dayjs';
+import * as dayjs from 'dayjs';
 import { Patient } from 'src/classes/patient.model';
 import { PatientsService } from './patients.service';
 import { CreateRecordDto } from 'src/dto/createRecordDto';
@@ -44,12 +44,13 @@ export class RecordsService {
         if (patient) {
             const recordsTable = this.db.getCollection('clinicalRecords')
             const newRecordId: number = this.recordId++
+            const newDate = dayjs().format('DD-MM-YYYY')
             recordsTable.insert({
                 recordId: newRecordId,
                 id: parseInt(id),
                 diagnostics: createRecordDto.diagnostics,
                 description: createRecordDto.description,
-                date: dayjs().format('DD-MM-YYYY')
+                date: newDate
             })
             return true
         }

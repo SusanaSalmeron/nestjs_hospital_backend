@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -17,6 +17,7 @@ import { DatabaseModule } from './database/database.module';
 import { UsersModule } from './modules/users.module';
 import { UsersController } from './controllers/users/users.controller';
 import { TokenService } from './services/token.service';
+import { AuthenticateTokenMiddleware } from './middlewares/authenticateToken.middleware';
 
 
 @Module({
@@ -24,4 +25,13 @@ import { TokenService } from './services/token.service';
   controllers: [AppController, CatalogController, PatientsController, DoctorsController, UsersController],
   providers: [AppService, UsersService, DiseasesService, DoctorsService, PatientsService, AppointmentsService, RecordsService, TokenService],
 })
-export class AppModule { }
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(AuthenticateTokenMiddleware)
+      .exclude(
+        { path: 'v1/user/login', method: RequestMethod.ALL },
+        { path: 'v1/catalogs/doctors', method: RequestMethod.ALL })
+      .forRoutes('/')
+  }
+}

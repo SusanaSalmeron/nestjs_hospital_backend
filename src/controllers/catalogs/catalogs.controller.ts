@@ -3,7 +3,7 @@ import { DiseasesService } from 'src/services/diseases.service';
 import { DoctorsService } from 'src/services/doctors.service';
 import { Doctor } from 'src/classes/doctor';
 import { Logger } from '@nestjs/common';
-import { ApiOkResponse, ApiNotFoundResponse, ApiInternalServerErrorResponse } from '@nestjs/swagger';
+import { ApiOkResponse, ApiNotFoundResponse, ApiInternalServerErrorResponse, ApiBearerAuth, ApiForbiddenResponse } from '@nestjs/swagger';
 
 
 @Controller('catalogs')
@@ -12,7 +12,9 @@ export class CatalogController {
     constructor(private diseasesService: DiseasesService, private doctorsService: DoctorsService) { }
 
     @Get('diseases')
+    @ApiBearerAuth('JWT-auth')
     @ApiOkResponse({ description: 'find diseases successfully' })
+    @ApiForbiddenResponse({ description: 'No token found' })
     @ApiNotFoundResponse({ description: 'diseases not found' })
     @ApiInternalServerErrorResponse({ description: 'Internal Server Error' })
     async getAllDiseases(@Res() response) {
