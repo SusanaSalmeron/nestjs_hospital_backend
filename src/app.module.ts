@@ -12,20 +12,23 @@ import { PatientsService } from './services/patients.service';
 import { PatientsController } from './controllers/patients/patients.controller';
 import { AppointmentsService } from './services/appointments.service';
 import { RecordsService } from './services/records.service';
+import { ValidationService } from './services/validation.service';
+import { ManagementService } from './services/management.service';
+import { TokenService } from './services/token.service';
 import { DoctorsController } from './controllers/doctors/doctors.controller';
+import { UsersController } from './controllers/users/users.controller';
+import { ManagementController } from './controllers/management/management.controller';
 import { DatabaseModule } from './database/database.module';
 import { UsersModule } from './modules/users.module';
-import { UsersController } from './controllers/users/users.controller';
-import { TokenService } from './services/token.service';
+import { ManagementModule } from './modules/management.module';
 import { AuthenticateTokenMiddleware } from './middlewares/authenticateToken.middleware';
 import { CheckLoginTokenMiddleware } from './middlewares/checkLoginToken.middleware';
-import { ValidationService } from './services/validation.service';
 
 
 @Module({
-  imports: [ConfigModule.forRoot(), CatalogModule, PatientsModule, DatabaseModule, UsersModule],
-  controllers: [AppController, CatalogController, PatientsController, DoctorsController, UsersController],
-  providers: [AppService, UsersService, DiseasesService, DoctorsService, PatientsService, AppointmentsService, RecordsService, TokenService, ValidationService],
+  imports: [ConfigModule.forRoot(), CatalogModule, PatientsModule, DatabaseModule, UsersModule, ManagementModule],
+  controllers: [AppController, CatalogController, PatientsController, DoctorsController, UsersController, ManagementController],
+  providers: [AppService, UsersService, DiseasesService, DoctorsService, PatientsService, AppointmentsService, RecordsService, TokenService, ValidationService, ManagementService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
@@ -35,7 +38,8 @@ export class AppModule implements NestModule {
         '(.*)/login',
         { path: 'v1/catalogs/doctors', method: RequestMethod.ALL },
         { path: 'v1/catalogs/diseases', method: RequestMethod.ALL },
-        { path: 'v1/users/register', method: RequestMethod.ALL }
+        { path: 'v1/users/register', method: RequestMethod.ALL },
+        { path: 'v1/management/contact', method: RequestMethod.ALL }
       )
       .forRoutes('/')
     consumer.apply(CheckLoginTokenMiddleware)

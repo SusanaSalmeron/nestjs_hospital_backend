@@ -1,16 +1,17 @@
 import { Controller, Get, Query, Param, Res, Req, Logger, HttpStatus, Post, Body, Delete, Put } from '@nestjs/common';
 import { ApiQuery, ApiNotFoundResponse, ApiOkResponse, ApiInternalServerErrorResponse, ApiCreatedResponse, ApiBody, ApiForbiddenResponse, ApiBearerAuth } from '@nestjs/swagger';
-import { Patient } from 'src/classes/patient.model';
+import { Patient } from 'src/classes/patient';
 import { Record } from 'src/classes/record';
-import { PatientsService } from 'src/services/patients.service';
-import { AppointmentsService } from 'src/services/appointments.service';
-import { RecordsService } from 'src/services/records.service';
+import { PatientToShow } from 'src/classes/patientToShow';
+import { Appointment } from 'src/classes/appointment';
 import { CreateAppointmentDto } from 'src/dto/createAppointmentDto';
 import { DeleteAppointDto } from 'src/dto/deleteAppointDto';
 import { CreateRecordDto } from 'src/dto/createRecordDto';
-import { Appointment } from 'src/classes/appointment';
 import { ModifyPatientDataDto } from 'src/dto/modifyPatientDataDto'
-import { PatientToShow } from 'src/classes/patientToShow';
+import { PatientsService } from 'src/services/patients.service';
+import { AppointmentsService } from 'src/services/appointments.service';
+import { RecordsService } from 'src/services/records.service';
+
 
 @Controller('patients')
 export class PatientsController {

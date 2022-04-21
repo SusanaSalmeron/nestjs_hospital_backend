@@ -1,7 +1,7 @@
 import { Controller, Get, HttpStatus, Logger, Param, Res } from '@nestjs/common';
+import { ApiNotFoundResponse, ApiOkResponse, ApiInternalServerErrorResponse, ApiForbiddenResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { DoctorAppointment } from 'src/classes/doctorAppointment';
 import { AppointmentsService } from 'src/services/appointments.service';
-import { ApiNotFoundResponse, ApiOkResponse, ApiInternalServerErrorResponse, ApiForbiddenResponse, ApiBearerAuth } from '@nestjs/swagger';
 
 
 @Controller('doctors')

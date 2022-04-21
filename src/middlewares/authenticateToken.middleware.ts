@@ -1,6 +1,7 @@
 import { ForbiddenException, Injectable, Logger, NestMiddleware, UnauthorizedException } from '@nestjs/common';
-import { verify } from 'jsonwebtoken';
 import { ConfigService } from '@nestjs/config';
+import { verify } from 'jsonwebtoken';
+
 
 @Injectable()
 export class AuthenticateTokenMiddleware implements NestMiddleware {
