@@ -4,11 +4,7 @@ export class CreateAppointmentDto {
     @ApiProperty()
     readonly pickedDate: string;
     @ApiProperty()
-    readonly doctorId: number;
+    readonly doctor: number;
 
-    constructor(pickedDate, doctorId) {
-        this.pickedDate = pickedDate;
-        this.doctorId = doctorId;
-    }
 }
 

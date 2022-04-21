@@ -18,20 +18,28 @@ import { UsersModule } from './modules/users.module';
 import { UsersController } from './controllers/users/users.controller';
 import { TokenService } from './services/token.service';
 import { AuthenticateTokenMiddleware } from './middlewares/authenticateToken.middleware';
+import { CheckLoginTokenMiddleware } from './middlewares/checkLoginToken.middleware';
+import { ValidationService } from './services/validation.service';
 
 
 @Module({
   imports: [ConfigModule.forRoot(), CatalogModule, PatientsModule, DatabaseModule, UsersModule],
   controllers: [AppController, CatalogController, PatientsController, DoctorsController, UsersController],
-  providers: [AppService, UsersService, DiseasesService, DoctorsService, PatientsService, AppointmentsService, RecordsService, TokenService],
+  providers: [AppService, UsersService, DiseasesService, DoctorsService, PatientsService, AppointmentsService, RecordsService, TokenService, ValidationService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(AuthenticateTokenMiddleware)
       .exclude(
-        { path: 'v1/user/login', method: RequestMethod.ALL },
-        { path: 'v1/catalogs/doctors', method: RequestMethod.ALL })
+        '(.*)/login',
+        { path: 'v1/catalogs/doctors', method: RequestMethod.ALL },
+        { path: 'v1/catalogs/diseases', method: RequestMethod.ALL },
+        { path: 'v1/users/register', method: RequestMethod.ALL }
+      )
       .forRoutes('/')
+    consumer.apply(CheckLoginTokenMiddleware)
+      .forRoutes({ path: 'v1/users/login', method: RequestMethod.POST })
+
   }
 }

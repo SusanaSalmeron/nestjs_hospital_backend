@@ -4,9 +4,11 @@ import { UsersController } from 'src/controllers/users/users.controller';
 import { DatabaseModule } from 'src/database/database.module';
 import { TokenService } from 'src/services/token.service';
 import { ConfigService } from '@nestjs/config';
+import { PatientsService } from 'src/services/patients.service';
+import { ValidationService } from 'src/services/validation.service';
 
 @Module({
-    providers: [UsersService, TokenService, ConfigService],
+    providers: [UsersService, TokenService, ConfigService, PatientsService, ValidationService],
     controllers: [UsersController],
     imports: [DatabaseModule]
 })

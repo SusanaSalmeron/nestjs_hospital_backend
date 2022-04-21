@@ -1,7 +1,6 @@
 import { ForbiddenException, Injectable, Logger, NestMiddleware, UnauthorizedException } from '@nestjs/common';
 import { verify } from 'jsonwebtoken';
 import { ConfigService } from '@nestjs/config';
-import { AccessTokenPayload } from 'src/classes/accessTokenPayload';
 
 @Injectable()
 export class AuthenticateTokenMiddleware implements NestMiddleware {
@@ -10,7 +9,7 @@ export class AuthenticateTokenMiddleware implements NestMiddleware {
   async use(req: Request | any, res: Response, next: () => void) {
     const authHeader = req.headers.authorization
     if (!authHeader) {
-
+      this.logger.error('No token found')
       throw new ForbiddenException('No token found');
     }
     const token = authHeader.split(' ')[1]
@@ -23,6 +22,7 @@ export class AuthenticateTokenMiddleware implements NestMiddleware {
       next()
     }
     catch (err) {
+      this.logger.error('Can not verify token', err)
       throw new UnauthorizedException('Unauthorized')
     }
   }

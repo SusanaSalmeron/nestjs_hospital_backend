@@ -1,4 +1,4 @@
-import { Controller, Get, Query, Param, Res, Req, Logger, HttpStatus, Post, Body, Delete } from '@nestjs/common';
+import { Controller, Get, Query, Param, Res, Req, Logger, HttpStatus, Post, Body, Delete, Put } from '@nestjs/common';
 import { ApiQuery, ApiNotFoundResponse, ApiOkResponse, ApiInternalServerErrorResponse, ApiCreatedResponse, ApiBody, ApiForbiddenResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { Patient } from 'src/classes/patient.model';
 import { Record } from 'src/classes/record';
@@ -9,8 +9,8 @@ import { CreateAppointmentDto } from 'src/dto/createAppointmentDto';
 import { DeleteAppointDto } from 'src/dto/deleteAppointDto';
 import { CreateRecordDto } from 'src/dto/createRecordDto';
 import { Appointment } from 'src/classes/appointment';
-
-
+import { ModifyPatientDataDto } from 'src/dto/modifyPatientDataDto'
+import { PatientToShow } from 'src/classes/patientToShow';
 
 @Controller('patients')
 export class PatientsController {
@@ -25,7 +25,7 @@ export class PatientsController {
     })
     @ApiOkResponse({
         description: 'Find patients successfully',
-        type: Patient
+        type: PatientToShow
     })
     @ApiNotFoundResponse({ description: 'Patients not found' })
     @ApiInternalServerErrorResponse({ description: 'Internal Server Error' })
@@ -71,6 +71,31 @@ export class PatientsController {
         }
     }
 
+    @Put('/:id')
+    @ApiBearerAuth('JWT-auth')
+    @ApiOkResponse({
+        description: 'Patient data modified correctly',
+        type: Patient
+    })
+    @ApiNotFoundResponse({ description: 'Patient not found' })
+    @ApiInternalServerErrorResponse({ description: 'Internal Server Error' })
+    async updatePatientData(@Param('id') id: string, @Res() response, @Body() modifyPatientDataDto: ModifyPatientDataDto) {
+        const { name, email, address, postalZip, region, country, phone, ssnumber, company } = modifyPatientDataDto
+        try {
+            const newData = await this.patientService.modifyPatientData(id, name, email, address, postalZip, region, country, phone, ssnumber, company)
+            if (newData) {
+                this.logger.log('Patient data updated successfully')
+                response.status(HttpStatus.OK).json(newData)
+            } else {
+                this.logger.log('Patient data not updated')
+                response.status(HttpStatus.OK).send()
+            }
+        } catch (err) {
+            this.logger.error('Internal server Error', err)
+            response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: 'Internal server error' })
+        }
+    }
+
     @Get('/:id/appointments')
     @ApiBearerAuth('JWT-auth')
     @ApiOkResponse({
@@ -88,7 +113,7 @@ export class PatientsController {
                 response.status(HttpStatus.OK).json(appointments)
             } else {
                 this.logger.error('appointments not found')
-                response.status(HttpStatus.NOT_FOUND).send('appointments not found')
+                response.status(HttpStatus.NOT_FOUND).json(appointments)
             }
         } catch (err) {
             this.logger.error('Internal Error', err)
@@ -115,7 +140,7 @@ export class PatientsController {
                 this.logger.log('Appointment added successfully')
                 response.status(HttpStatus.CREATED).send()
             } else {
-                this.logger.error('No Appointment')
+                this.logger.error('No Appointment 2')
                 response.status(HttpStatus.NOT_FOUND).json({ error: 'The patient id or the doctor id does not exists' })
             }
         } catch (err) {

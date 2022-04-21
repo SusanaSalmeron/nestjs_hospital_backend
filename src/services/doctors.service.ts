@@ -10,7 +10,6 @@ export class DoctorsService {
     async findAll(): Promise<Doctor[]> {
         this.logger.log('Getting doctors')
         const doctorsTable = this.db.getCollection('doctors')
-        this.logger.debug(JSON.stringify(doctorsTable))
         const doctors = doctorsTable.find(true)
         return doctors.map(doctor => {
             return new Doctor(

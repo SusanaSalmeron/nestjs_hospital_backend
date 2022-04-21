@@ -12,7 +12,6 @@ export class CatalogController {
     constructor(private diseasesService: DiseasesService, private doctorsService: DoctorsService) { }
 
     @Get('diseases')
-    @ApiBearerAuth('JWT-auth')
     @ApiOkResponse({ description: 'find diseases successfully' })
     @ApiForbiddenResponse({ description: 'No token found' })
     @ApiNotFoundResponse({ description: 'diseases not found' })

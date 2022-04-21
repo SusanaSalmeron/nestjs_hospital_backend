@@ -76,7 +76,12 @@ export class AppointmentsService {
     async createNewAppointment(patientId: string, createAppDto: CreateAppointmentDto): Promise<number> {
         const patient: Patient = await this.PatientService.findById(patientId)
         const doctorTable = this.db.getCollection('doctors')
-        const doctor: Doctor = doctorTable.findOne({ id: createAppDto.doctorId })
+        const docId = typeof createAppDto.doctor === "string" ? parseInt(createAppDto.doctor) : createAppDto.doctor;
+        const doctor: Doctor = doctorTable.findOne({ id: docId })
+
+        this.logger.debug('service')
+        this.logger.debug(patient)
+        this.logger.debug(doctor)
         if (patient && doctor) {
             const appointmentsTable = this.db.getCollection('appointments')
             const newId: number = this.appointmentId++
@@ -84,7 +89,7 @@ export class AppointmentsService {
                 id: newId,
                 patientId: parseInt(patientId),
                 pickedDate: createAppDto.pickedDate,
-                doctorId: createAppDto.doctorId
+                doctorId: doctor.id
             })
             return newId
         }

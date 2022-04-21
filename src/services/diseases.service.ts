@@ -10,10 +10,6 @@ export class DiseasesService {
         this.logger.log('Getting diseases')
         const diseasesTable = this.db.getCollection('diseases')
         const diseases = diseasesTable.find(true)
-        return diseases.map(d => {
-            return {
-                name: d.name
-            }
-        })
+        return diseases.map(d => d.name)
     }
 }

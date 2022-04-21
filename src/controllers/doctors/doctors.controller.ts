@@ -26,7 +26,7 @@ export class DoctorsController {
                 return response.status(HttpStatus.OK).json(doctorAppointments)
             } else {
                 this.logger.log('No appointments')
-                response.status(HttpStatus.NOT_FOUND).send('No appointments')
+                response.status(HttpStatus.NOT_FOUND).send(doctorAppointments)
             }
         } catch (err) {
             this.logger.error('Internal Error', err)
