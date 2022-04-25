@@ -23,12 +23,15 @@ import { UsersModule } from './modules/users.module';
 import { ManagementModule } from './modules/management.module';
 import { AuthenticateTokenMiddleware } from './middlewares/authenticateToken.middleware';
 import { CheckLoginTokenMiddleware } from './middlewares/checkLoginToken.middleware';
+import { AuthorizeDoctorMiddleware } from './middlewares/authorize-doctor.middleware';
+import { ValidateDateMiddleware } from './middlewares/validate-date.middleware';
+import { EmailService } from './services/email.service';
 
 
 @Module({
   imports: [ConfigModule.forRoot(), CatalogModule, PatientsModule, DatabaseModule, UsersModule, ManagementModule],
   controllers: [AppController, CatalogController, PatientsController, DoctorsController, UsersController, ManagementController],
-  providers: [AppService, UsersService, DiseasesService, DoctorsService, PatientsService, AppointmentsService, RecordsService, TokenService, ValidationService, ManagementService],
+  providers: [AppService, UsersService, DiseasesService, DoctorsService, PatientsService, AppointmentsService, RecordsService, TokenService, ValidationService, ManagementService, EmailService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
@@ -42,8 +45,17 @@ export class AppModule implements NestModule {
         { path: 'v1/management/contact', method: RequestMethod.ALL }
       )
       .forRoutes('/')
+    consumer.apply(ValidateDateMiddleware)
+      .forRoutes(
+        { path: 'v1/patients/:id/appointments', method: RequestMethod.POST }
+      )
+    consumer.apply(AuthorizeDoctorMiddleware)
+      .forRoutes(
+        { path: 'v1/doctors/:id/appointments', method: RequestMethod.GET },
+        { path: 'v1/patients', method: RequestMethod.GET },
+        { path: 'v1/patients/:id/records', method: RequestMethod.ALL }
+      )
     consumer.apply(CheckLoginTokenMiddleware)
       .forRoutes({ path: 'v1/users/login', method: RequestMethod.POST })
-
   }
 }
