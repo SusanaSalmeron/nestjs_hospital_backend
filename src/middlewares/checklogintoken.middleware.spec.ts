@@ -1,4 +1,4 @@
-import { CheckLoginTokenMiddleware } from './checklogintoken.middleware';
+import { CheckLoginTokenMiddleware } from './checkLoginToken.middleware'
 
 describe('ChecklogintokenMiddleware', () => {
   it('should be defined', () => {
