@@ -1,7 +1,7 @@
-import { ChecklogintokenMiddleware } from './checklogintoken.middleware';
+import { CheckLoginTokenMiddleware } from './checklogintoken.middleware';
 
 describe('ChecklogintokenMiddleware', () => {
   it('should be defined', () => {
-    expect(new ChecklogintokenMiddleware()).toBeDefined();
+    expect(new CheckLoginTokenMiddleware()).toBeDefined();
   });
 });

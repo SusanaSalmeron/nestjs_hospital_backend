@@ -1,8 +1,8 @@
 import { Controller, Get, HttpStatus, Res, Logger } from '@nestjs/common';
 import { ApiOkResponse, ApiNotFoundResponse, ApiInternalServerErrorResponse, ApiForbiddenResponse } from '@nestjs/swagger';
-import { DiseasesService } from 'src/services/diseases.service';
-import { DoctorsService } from 'src/services/doctors.service';
-import { Doctor } from 'src/classes/doctor';
+import { DiseasesService } from '../../services/diseases.service';
+import { DoctorsService } from '../../services/doctors.service';
+import { Doctor } from '../../classes/doctor';
 
 
 

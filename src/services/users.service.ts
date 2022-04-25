@@ -1,5 +1,5 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { User } from 'src/classes/user';
+import { User } from '../classes/user';
 import * as loki from 'lokijs'
 
 

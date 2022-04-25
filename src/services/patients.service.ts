@@ -1,6 +1,6 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { Patient } from 'src/classes/patient';
-import { PatientToShow } from 'src/classes/patientToShow';
+import { Patient } from '../classes/patient';
+import { PatientToShow } from '../classes/patientToShow';
 import * as loki from 'lokijs'
 
 

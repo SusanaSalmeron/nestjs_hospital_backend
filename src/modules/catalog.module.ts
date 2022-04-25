@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
-import { DiseasesService } from 'src/services/diseases.service';
-import { DoctorsService } from 'src/services/doctors.service';
-import { CatalogController } from 'src/controllers/catalogs/catalogs.controller';
-import { DatabaseModule } from 'src/database/database.module';
+import { DiseasesService } from '../services/diseases.service';
+import { DoctorsService } from '../services/doctors.service';
+import { CatalogController } from '../controllers/catalogs/catalogs.controller';
+import { DatabaseModule } from '../database/database.module';
 
 @Module({
     providers: [DiseasesService, DoctorsService],

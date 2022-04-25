@@ -1,8 +1,8 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { Record } from 'src/classes/record';
-import { ClinicalRecord } from 'src/classes/clinicalRecord';
-import { Patient } from 'src/classes/patient';
-import { CreateRecordDto } from 'src/dto/createRecordDto';
+import { Record } from '../classes/record';
+import { ClinicalRecord } from '../classes/clinicalRecord';
+import { Patient } from '../classes/patient';
+import { CreateRecordDto } from '../dto/createRecordDto';
 import { PatientsService } from './patients.service';
 import * as loki from 'lokijs';
 import * as dayjs from 'dayjs';

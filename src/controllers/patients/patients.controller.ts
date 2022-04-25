@@ -1,16 +1,16 @@
 import { Controller, Get, Query, Param, Res, Req, Logger, HttpStatus, Post, Body, Delete, Put } from '@nestjs/common';
 import { ApiQuery, ApiNotFoundResponse, ApiOkResponse, ApiInternalServerErrorResponse, ApiCreatedResponse, ApiBody, ApiForbiddenResponse, ApiBearerAuth } from '@nestjs/swagger';
-import { Patient } from 'src/classes/patient';
-import { Record } from 'src/classes/record';
-import { PatientToShow } from 'src/classes/patientToShow';
-import { Appointment } from 'src/classes/appointment';
-import { CreateAppointmentDto } from 'src/dto/createAppointmentDto';
-import { DeleteAppointDto } from 'src/dto/deleteAppointDto';
-import { CreateRecordDto } from 'src/dto/createRecordDto';
-import { ModifyPatientDataDto } from 'src/dto/modifyPatientDataDto'
-import { PatientsService } from 'src/services/patients.service';
-import { AppointmentsService } from 'src/services/appointments.service';
-import { RecordsService } from 'src/services/records.service';
+import { Patient } from '../../classes/patient';
+import { Record } from '../../classes/record';
+import { PatientToShow } from '../../classes/patientToShow';
+import { Appointment } from '../../classes/appointment';
+import { CreateAppointmentDto } from '../../dto/createAppointmentDto';
+import { DeleteAppointDto } from '../../dto/deleteAppointDto';
+import { CreateRecordDto } from '../../dto/createRecordDto';
+import { ModifyPatientDataDto } from '../../dto/modifyPatientDataDto'
+import { PatientsService } from '../../services/patients.service';
+import { AppointmentsService } from '../../services/appointments.service';
+import { RecordsService } from '../../services/records.service';
 
 
 @Controller('patients')

@@ -1,12 +1,12 @@
 import { Body, Controller, HttpStatus, Logger, Post, Res } from '@nestjs/common';
 import { ApiBadRequestResponse, ApiBody, ApiCreatedResponse, ApiInternalServerErrorResponse, ApiNotFoundResponse, ApiOkResponse, ApiUnauthorizedResponse } from '@nestjs/swagger';
-import { Token } from 'src/classes/token';
-import { CreateUserDto } from 'src/dto/createUserDto';
-import { CreateNewUserDto } from 'src/dto/createNewUserDto';
-import { UsersService } from 'src/services/users.service';
-import { TokenService } from 'src/services/token.service';
-import { PatientsService } from 'src/services/patients.service';
-import { ValidationService } from 'src/services/validation.service';
+import { Token } from '../../classes/token';
+import { CreateUserDto } from '../../dto/createUserDto';
+import { CreateNewUserDto } from '../../dto/createNewUserDto';
+import { UsersService } from '../../services/users.service';
+import { TokenService } from '../../services/token.service';
+import { PatientsService } from '../../services/patients.service';
+import { ValidationService } from '../../services/validation.service';
 
 
 @Controller('users')

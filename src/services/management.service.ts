@@ -1,5 +1,5 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { CreateContactUsDto } from 'src/dto/createContactUsDto';
+import { CreateContactUsDto } from '../dto/createContactUsDto';
 import * as loki from 'lokijs';
 
 

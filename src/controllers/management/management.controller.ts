@@ -1,8 +1,8 @@
 import { Body, Controller, HttpStatus, Logger, Post, Res } from '@nestjs/common';
 import { ApiBadRequestResponse, ApiBody, ApiCreatedResponse } from '@nestjs/swagger';
-import { ManagementService } from 'src/services/management.service';
-import { CreateContactUsDto } from 'src/dto/createContactUsDto';
-import { EmailService } from 'src/services/email.service';
+import { ManagementService } from '../../services/management.service';
+import { CreateContactUsDto } from '../../dto/createContactUsDto';
+import { EmailService } from '../../services/email.service';
 
 
 @Controller('management')

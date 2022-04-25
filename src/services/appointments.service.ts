@@ -1,11 +1,11 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { PatientsService } from 'src/services/patients.service';
-import { Doctor } from 'src/classes/doctor';
-import { Patient } from 'src/classes/patient';
-import { Appointment } from 'src/classes/appointment';
-import { DoctorAppointment } from 'src/classes/doctorAppointment'
-import { CreateAppointmentDto } from 'src/dto/createAppointmentDto';
-import { DeleteAppointDto } from 'src/dto/deleteAppointDto';
+import { PatientsService } from '../services/patients.service';
+import { Doctor } from '../classes/doctor';
+import { Patient } from '../classes/patient';
+import { Appointment } from '../classes/appointment';
+import { DoctorAppointment } from '../classes/doctorAppointment'
+import { CreateAppointmentDto } from '../dto/createAppointmentDto';
+import { DeleteAppointDto } from '../dto/deleteAppointDto';
 import * as loki from 'lokijs'
 
 
