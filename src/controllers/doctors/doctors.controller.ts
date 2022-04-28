@@ -18,19 +18,22 @@ export class DoctorsController {
     @ApiNotFoundResponse({ description: 'Doctor appointments not found' })
     @ApiInternalServerErrorResponse({ description: 'Internal Server Error' })
     @ApiForbiddenResponse({ description: 'No token found' })
-    async getAppointmentsFromDoctor(@Param('id') id: string, @Res() response): Promise<DoctorAppointment[]> {
+    async getAppointmentsFromDoctor(@Param('id') id: string, @Res() response) {
         try {
             const doctorAppointments = await this.appointmentsService.findAppointmentsFromDoctor(id)
             if (doctorAppointments.length) {
                 this.logger.log('Get doctor appointments successfully')
-                return response.status(HttpStatus.OK).json(doctorAppointments)
+                response.status(HttpStatus.OK)
+                response.json(doctorAppointments)
             } else {
                 this.logger.log('No appointments')
-                response.status(HttpStatus.NOT_FOUND).send(doctorAppointments)
+                response.status(HttpStatus.NOT_FOUND)
+                response.send(doctorAppointments)
             }
         } catch (err) {
             this.logger.error('Internal Error', err)
-            response.status(HttpStatus.INTERNAL_SERVER_ERROR).send('Internal Error')
+            response.status(HttpStatus.INTERNAL_SERVER_ERROR)
+            response.send('Internal Error')
         }
     }
 }

@@ -21,14 +21,17 @@ export class CatalogController {
             const diseases: string[] = await this.diseasesService.findAll()
             if (diseases) {
                 this.logger.log('find diseases successfully')
-                return response.json(diseases)
+                response.status(HttpStatus.OK)
+                response.json(diseases)
             } else {
                 this.logger.error('diseases not found')
-                response.status(HttpStatus.NOT_FOUND).send('diseases not found')
+                response.send('diseases not found')
+                response.status(HttpStatus.NOT_FOUND)
             }
         } catch (err) {
             this.logger.error('Internal Error', err)
-            response.status(HttpStatus.INTERNAL_SERVER_ERROR).send('Internal Error')
+            response.status(HttpStatus.INTERNAL_SERVER_ERROR)
+            response.send('Internal Error')
         }
     }
 
@@ -41,13 +44,15 @@ export class CatalogController {
             const doctors: Doctor[] = await this.doctorsService.findAll()
             if (doctors) {
                 this.logger.log('get doctors successfully')
-                return response.json(doctors)
+                response.status(HttpStatus.OK)
+                response.json(doctors)
             } else {
                 this.logger.error('doctors not found')
             }
         } catch (err) {
             this.logger.error('Internal Error', err)
-            response.status(HttpStatus.INTERNAL_SERVER_ERROR).send('Internal Error')
+            response.status(HttpStatus.INTERNAL_SERVER_ERROR)
+            response.send('Internal Error')
         }
     }
 }

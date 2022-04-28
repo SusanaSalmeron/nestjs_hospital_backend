@@ -1,20 +1,24 @@
-/* import { Test, TestingModule } from '@nestjs/testing';
-import { AppointmentsService } from './appointments.service'; */
+import { Test, TestingModule } from '@nestjs/testing';
+import { DatabaseModule } from '../database/database.module';
+import { AppointmentsService } from './appointments.service';
+import { PatientsService } from './patients.service';
 
 describe('AppointmentsService', () => {
-  /*   let service: AppointmentsService;
-  
-    beforeEach(async () => {
-      const module: TestingModule = await Test.createTestingModule({
-        providers: [AppointmentsService],
+  let appService: AppointmentsService;
+
+  beforeEach(async () => {
+
+    const module: TestingModule = await Test.
+      createTestingModule({
+        providers: [AppointmentsService, PatientsService],
+        imports: [DatabaseModule]
       }).compile();
-  
-      service = module.get<AppointmentsService>(AppointmentsService);
-    }); */
+
+    appService = module.get<AppointmentsService>(AppointmentsService);
+  });
 
   it('should be defined', () => {
-    /*     expect(service).toBeDefined();
-     */
+    expect(appService).toBeDefined();
     expect(true).toBeTruthy()
   });
 });
