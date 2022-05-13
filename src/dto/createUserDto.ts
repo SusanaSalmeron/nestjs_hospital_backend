@@ -6,7 +6,7 @@ export class CreateUserDto {
     @ApiProperty()
     readonly email: string;
 
-    constructor(password, email) {
+    constructor(email, password) {
         this.password = password;
         this.email = email;
     }

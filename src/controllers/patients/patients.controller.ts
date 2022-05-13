@@ -36,17 +36,14 @@ export class PatientsController {
             const patients = await this.patientService.findBy(keyword)
             if (patients.length) {
                 this.logger.debug('Find patients successfully')
-                response.status(HttpStatus.OK)
-                response.json(patients)
+                response.status(HttpStatus.OK).json(patients)
             } else {
                 this.logger.error('Patients not found')
-                response.status(HttpStatus.NOT_FOUND)
-                response.send('Patients not found')
+                response.status(HttpStatus.NOT_FOUND).send('Patients not found')
             }
         } catch (err) {
             this.logger.error('Internal Server Error', err)
-            response.status(HttpStatus.INTERNAL_SERVER_ERROR)
-            response.send('Internal Server Error')
+            response.status(HttpStatus.INTERNAL_SERVER_ERROR).send('Internal Server Error')
         }
     }
 
@@ -64,17 +61,14 @@ export class PatientsController {
             const patient = await this.patientService.findById(id)
             if (patient) {
                 this.logger.debug('Find Patient successfully')
-                response.status(HttpStatus.OK)
-                response.json(patient)
+                response.status(HttpStatus.OK).json(patient)
             } else {
                 this.logger.error('Patient not found')
-                response.status(HttpStatus.NOT_FOUND)
-                response.send('Patient Not Found')
+                response.status(HttpStatus.NOT_FOUND).send('Patient Not Found')
             }
         } catch (err) {
             this.logger.error('Internal Server Error')
-            response.status(HttpStatus.INTERNAL_SERVER_ERROR)
-            response.send('Internal Server Error', err)
+            response.status(HttpStatus.INTERNAL_SERVER_ERROR).send('Internal Server Error', err)
         }
     }
     @Put('/:id')
@@ -91,17 +85,14 @@ export class PatientsController {
             const newData = await this.patientService.modifyPatientData(id, name, email, address, postalZip, region, country, phone, ssnumber, company)
             if (newData) {
                 this.logger.log('Patient data updated successfully')
-                response.status(HttpStatus.OK)
-                response.json(newData)
+                response.status(HttpStatus.OK).json(newData)
             } else {
                 this.logger.log('Patient data not updated')
-                response.status(HttpStatus.OK)
-                response.send()
+                response.status(HttpStatus.OK).send()
             }
         } catch (err) {
             this.logger.error('Internal server Error', err)
-            response.status(HttpStatus.INTERNAL_SERVER_ERROR)
-            response.json({ error: 'Internal server error' })
+            response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: 'Internal server error' })
         }
     }
 
@@ -119,17 +110,14 @@ export class PatientsController {
             const appointments = await this.appointmentsService.findAppointmentsByPatient(id)
             if (appointments.length) {
                 this.logger.debug('find appointments successfully')
-                response.status(HttpStatus.OK)
-                response.json(appointments)
+                response.status(HttpStatus.OK).json(appointments)
             } else {
                 this.logger.error('appointments not found')
-                response.status(HttpStatus.NOT_FOUND)
-                response.json(appointments)
+                response.status(HttpStatus.NOT_FOUND).json(appointments)
             }
         } catch (err) {
             this.logger.error('Internal Error', err)
-            response.status(HttpStatus.INTERNAL_SERVER_ERROR)
-            response.send('Internal error')
+            response.status(HttpStatus.INTERNAL_SERVER_ERROR).send('Internal error')
         }
     }
 
@@ -149,7 +137,7 @@ export class PatientsController {
             const appointmentId = await this.appointmentsService.createNewAppointment(id, createAppDto)
             if (appointmentId) {
                 this.logger.log('Appointment added successfully')
-                response.status(HttpStatus.CREATED).send()
+                response.status(HttpStatus.CREATED)
             } else {
                 this.logger.error('No Appointment 2')
                 response.status(HttpStatus.NOT_FOUND).json({ error: 'The patient id or the doctor id does not exists' })
@@ -173,7 +161,7 @@ export class PatientsController {
             const appointmentDeleted = await this.appointmentsService.deleteAppointment(deleteAppointDto)
             if (appointmentDeleted) {
                 this.logger.log('Appointment deleted successfully')
-                response.status(HttpStatus.OK).send()
+                response.status(HttpStatus.OK)
             } else {
                 this.logger.error('Appointment does not exists')
                 response.status(HttpStatus.NOT_FOUND).json({ error: 'Appointment does not exists' })
@@ -220,7 +208,7 @@ export class PatientsController {
     @ApiNotFoundResponse({ description: 'Patient not found' })
     @ApiInternalServerErrorResponse({ description: '' })
     @ApiForbiddenResponse({ description: "Current role is not authorized" })
-    async createNewRecord(@Param('id') id: string, @Res() response, @Req() request, @Body() createRecordDto: CreateRecordDto) {
+    async createNewRecord(@Param('id') id: string, @Req() request, @Res() response, @Body() createRecordDto: CreateRecordDto) {
         if (request.role === "sanitario") {
             try {
                 const recordAdded = await this.recordsService.addNewRecord(id, createRecordDto)

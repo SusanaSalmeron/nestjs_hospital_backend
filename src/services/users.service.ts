@@ -15,8 +15,8 @@ export class UsersService {
         if (foundUser) {
             return new User(
                 foundUser.name,
-                foundUser.password,
                 foundUser.email,
+                foundUser.password,
                 foundUser.role,
                 foundUser.id
             )

@@ -10,9 +10,9 @@ describe('ManagementController Unit Test', () => {
   let spyEmailService: EmailService;
 
   const response = {
-    send: jest.fn(),
-    status: jest.fn(),
-    json: jest.fn()
+    send: jest.fn().mockReturnThis(),
+    status: jest.fn().mockReturnThis(),
+    json: jest.fn().mockReturnThis()
   }
 
   const body: CreateContactUsDto = {
@@ -27,13 +27,13 @@ describe('ManagementController Unit Test', () => {
     const managementServiceProvider = {
       provide: ManagementService,
       useFactory: () => ({
-        addQueryToDB: jest.fn(() => true)
+        addQueryToDB: jest.fn((): boolean => true)
       })
     }
     const emailServiceProvider = {
       provide: EmailService,
       useFactory: () => ({
-        sendEmail: jest.fn(() => true)
+        sendEmail: jest.fn((): boolean => true)
       })
     }
     const module: TestingModule = await Test.createTestingModule({

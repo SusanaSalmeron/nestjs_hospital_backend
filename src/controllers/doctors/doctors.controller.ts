@@ -23,17 +23,14 @@ export class DoctorsController {
             const doctorAppointments = await this.appointmentsService.findAppointmentsFromDoctor(id)
             if (doctorAppointments.length) {
                 this.logger.log('Get doctor appointments successfully')
-                response.status(HttpStatus.OK)
-                response.json(doctorAppointments)
+                response.status(HttpStatus.OK).json(doctorAppointments)
             } else {
                 this.logger.log('No appointments')
-                response.status(HttpStatus.NOT_FOUND)
-                response.send(doctorAppointments)
+                response.status(HttpStatus.NOT_FOUND).send(doctorAppointments)
             }
         } catch (err) {
             this.logger.error('Internal Error', err)
-            response.status(HttpStatus.INTERNAL_SERVER_ERROR)
-            response.send('Internal Error')
+            response.status(HttpStatus.INTERNAL_SERVER_ERROR).send('Internal Error')
         }
     }
 }

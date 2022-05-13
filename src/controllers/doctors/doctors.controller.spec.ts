@@ -10,9 +10,9 @@ describe('DoctorsController Unit Tests', () => {
 
   const id = "4"
   const response = {
-    send: jest.fn(),
-    status: jest.fn(),
-    json: jest.fn()
+    send: jest.fn().mockReturnThis(),
+    status: jest.fn().mockReturnThis(),
+    json: jest.fn().mockReturnThis()
   }
 
   beforeEach(async () => {
@@ -46,8 +46,8 @@ describe('DoctorsController Unit Tests', () => {
           "15/10/2022"
         )
         ]),
-        createNewAppointment: jest.fn(() => 40),
-        deleteAppointment: jest.fn(() => true)
+        createNewAppointment: jest.fn((): number => 40),
+        deleteAppointment: jest.fn((): boolean => true)
       })
     }
     const module: TestingModule = await Test.createTestingModule({

@@ -23,12 +23,10 @@ export class ManagementController {
             const message = await this.managementService.addQueryToDB(createContactUsDto)
             await this.emailService.sendEmail(createContactUsDto.email)
             this.logger.log('added to database')
-            response.status(HttpStatus.CREATED)
-            response.json(message)
+            response.status(HttpStatus.CREATED).json(message)
         } catch (err) {
             this.logger.error('Bad Request', err)
-            response.status(HttpStatus.BAD_REQUEST)
-            response.json({ error: 'Bad Request' })
+            response.status(HttpStatus.BAD_REQUEST).json({ error: 'Bad Request' })
         }
     }
 }

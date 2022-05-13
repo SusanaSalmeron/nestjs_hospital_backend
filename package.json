@@ -26,8 +26,8 @@
     "@nestjs/core": "8.4.4",
     "@nestjs/platform-express": "8.4.4",
     "@nestjs/swagger": "5.2.1",
-    "class-validator": "0.13.2",
     "class-transformer": "0.5.1",
+    "class-validator": "0.13.2",
     "dayjs": "1.11.1",
     "dotenv": "16.0.0",
     "jsonwebtoken": "8.5.1",
@@ -38,6 +38,7 @@
     "rxjs": "7.5.5"
   },
   "devDependencies": {
+    "@golevelup/ts-jest": "0.3.3",
     "@nestjs/cli": "8.2.5",
     "@nestjs/schematics": "8.0.10",
     "@nestjs/testing": "8.4.4",
@@ -45,6 +46,7 @@
     "@types/jest": "27.4.1",
     "@types/jsonwebtoken": "8.5.8",
     "@types/node": "17.0.23",
+    "@types/node-fetch": "2.6.1",
     "@types/supertest": "2.0.12",
     "@typescript-eslint/eslint-plugin": "5.21.0",
     "@typescript-eslint/parser": "5.21.0",

@@ -11,6 +11,7 @@ import { PatientToShow } from '../../classes/patientToShow';
 import { ClinicalRecord } from '../../classes/clinicalRecord';
 import { Appointment } from '../../classes/appointment';
 import { DoctorAppointment } from '../../classes/doctorAppointment';
+import { DeleteAppointDto } from 'src/dto/deleteAppointDto';
 
 describe('PatientsController Unit test', () => {
   let patientsController: PatientsController;
@@ -21,10 +22,15 @@ describe('PatientsController Unit test', () => {
   const keyword = ""
   const id = "1"
   const response = {
-    send: jest.fn(),
-    status: jest.fn(),
-    json: jest.fn()
+    send: jest.fn().mockReturnThis(),
+    status: jest.fn().mockReturnThis(),
+    json: jest.fn().mockReturnThis()
   }
+
+  const request = {
+    role: "sanitario"
+  }
+
   const modifyBody: ModifyPatientDataDto = {
     name: "Andrew",
     email: "andrew@gmail.com",
@@ -45,10 +51,14 @@ describe('PatientsController Unit test', () => {
     diagnostics: "cold",
     description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua"
   }
-  const request = { role: "sanitario" }
+
+  const deleteApp: DeleteAppointDto = {
+    id: "1",
+    appId: "40"
+  }
 
   beforeEach(async () => {
-    const patientServiceProvider = {
+    const patientsServiceProvider = {
       provide: PatientsService,
       useFactory: () => ({
         findBy: jest.fn(() => [new PatientToShow(
@@ -78,8 +88,8 @@ describe('PatientsController Unit test', () => {
           "8796590",
           "Adeslas"
         )),
-        addPatientToDB: jest.fn(() => true),
-        modifyPatientData: jest.fn(() => true)
+        addPatientToDB: jest.fn((): boolean => true),
+        modifyPatientData: jest.fn((): boolean => true)
       })
     }
     const appointmentsServiceProvider = {
@@ -111,8 +121,8 @@ describe('PatientsController Unit test', () => {
           "Peter",
           "15/10/2022"
         )]),
-        createNewAppointment: jest.fn(() => 40),
-        deleteAppointment: jest.fn(() => true)
+        createNewAppointment: jest.fn((): boolean => true),
+        deleteAppointment: jest.fn((): boolean => true)
       })
     }
     const recordsServiceProvider = {
@@ -131,14 +141,15 @@ describe('PatientsController Unit test', () => {
               description: "Phasellus dolor elit, pellentesque a, facilisis non, bibendum sed, est. Nunc laoreet lectus quis massa. Mauris vestibulum, neque sed dictum eleifend, nunc risus varius orci, in consequat enim diam vel arcu",
               diagnostics: "asthma, diarrhea, cirrhosis"
             }
-          ])
-        ])
+          ]),
+        ]),
+        addNewRecord: jest.fn((): boolean => true)
       }),
-      addNewRecord: jest.fn(() => true)
+
     }
     const module: TestingModule = await Test.createTestingModule({
       controllers: [PatientsController],
-      providers: [PatientsService, RecordsService, AppointmentsService, appointmentsServiceProvider, recordsServiceProvider, patientServiceProvider]
+      providers: [PatientsService, RecordsService, AppointmentsService, appointmentsServiceProvider, recordsServiceProvider, patientsServiceProvider]
     }).compile();
 
     patientsController = module.get<PatientsController>(PatientsController);
@@ -194,6 +205,7 @@ describe('PatientsController Unit test', () => {
     expect(response.json).toBeTruthy()
     expect(response.send).not.toHaveBeenCalled()
   })
+
   it('should show appointments from a valid patient when getAppointmentsByPatient is called', async () => {
     await patientsController.getAppointmentsByPatient(id, response)
     expect(spyAppointmentsService.findAppointmentsByPatient).toHaveBeenCalled()
@@ -213,4 +225,35 @@ describe('PatientsController Unit test', () => {
     expect(response.send).not.toHaveBeenCalled()
   })
 
+  it('should add an appointment when addAppointment is called', async () => {
+    await patientsController.addAppointment(id, response, createBody)
+    expect(spyAppointmentsService.createNewAppointment).toHaveBeenCalled()
+    expect(response.status).toHaveBeenCalledWith(201)
+    expect(response.json).toHaveBeenCalledWith(true)
+    expect(response.send).not.toHaveBeenCalled()
+  })
+
+  it('should delete a valid appointment when eraseAppointment is called', async () => {
+    await patientsController.eraseAppointment(deleteApp, response)
+    expect(spyAppointmentsService.deleteAppointment).toHaveBeenCalled()
+    expect(response.status).toHaveBeenCalledWith(200)
+    expect(response.json).toHaveBeenCalledWith(true)
+    expect(response.send).not.toHaveBeenCalled()
+  })
+
+  it('should show all appointments from a valid patient when getRecordsByPatient is called', async () => {
+    await patientsController.getRecordsByPatient(id, response)
+    expect(spyRecordsService.findRecordsByPatient).toHaveBeenCalled()
+    expect(response.status).toHaveBeenCalledWith(200)
+    expect(response.json).toHaveBeenCalledWith(true)
+    expect(response.send).not.toHaveBeenCalled()
+  })
+
+  it('should add a new record from a valid patient when createNewRecord is called', async () => {
+    await patientsController.createNewRecord(id, request, response, recordBody)
+    expect(spyRecordsService.addNewRecord).toHaveBeenCalled()
+    expect(response.status).toHaveBeenCalledWith(201)
+    expect(response.json).toHaveBeenCalledWith(true)
+    expect(response.send).not.toHaveBeenCalled()
+  })
 });

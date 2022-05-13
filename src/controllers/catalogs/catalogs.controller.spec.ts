@@ -10,9 +10,9 @@ describe('CatalogController Unit Tests', () => {
   let spyDoctorsService: DoctorsService
 
   const response = {
-    send: jest.fn(),
-    status: jest.fn(),
-    json: jest.fn()
+    send: jest.fn().mockReturnThis(),
+    status: jest.fn().mockReturnThis(),
+    json: jest.fn().mockReturnThis()
   }
 
   beforeAll(async () => {

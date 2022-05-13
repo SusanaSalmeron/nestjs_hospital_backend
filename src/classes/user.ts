@@ -12,10 +12,10 @@ export class User {
     @ApiProperty()
     id: number
 
-    constructor(name, password, email, role, id) {
+    constructor(name, email, password, role, id) {
         this.name = name;
-        this.password = password;
         this.email = email;
+        this.password = password;
         this.role = role;
         this.id = id
     }

@@ -16,6 +16,7 @@ export class TokenService {
             expiration: date
         }
         const secretKey = this.configService.get<string>('SECRET_KEY')
+        console.log(jwt.sign(claims, secretKey))
         return await jwt.sign(claims, secretKey)
     }
 }
