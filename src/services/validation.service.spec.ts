@@ -25,7 +25,7 @@ describe('ValidationService', () => {
     const result = await validationService.validatePassword('123')
     expect(result).toBeFalsy()
   });
-  it('should be false when pass a non valid password', async () => {
+  it('should be true when pass a valid password', async () => {
     const result = await validationService.validatePassword('12345ABc!')
     expect(result).toBeTruthy()
   });
