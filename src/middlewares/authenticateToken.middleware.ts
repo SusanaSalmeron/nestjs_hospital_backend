@@ -1,7 +1,6 @@
 import { ForbiddenException, Injectable, Logger, NestMiddleware, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { verify } from 'jsonwebtoken';
-
+import * as jwt from 'jsonwebtoken';
 
 @Injectable()
 export class AuthenticateTokenMiddleware implements NestMiddleware {
@@ -17,7 +16,7 @@ export class AuthenticateTokenMiddleware implements NestMiddleware {
     try {
       const secretkey = this.configService.get<string>('SECRET_KEY')
       //TODO - role any -
-      const { role }: any = verify(token, secretkey)
+      const { role }: any = jwt.verify(token, secretkey)
       req.role = role
       this.logger.log('Token Verified')
       next()

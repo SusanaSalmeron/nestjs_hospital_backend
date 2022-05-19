@@ -31,7 +31,6 @@ export class EmailService {
 
     async sendEmail(email) {
         const emailClient = await this.getEmailClient()
-        console.log(emailClient)
         const info = await emailClient.sendMail({
             from: "emailhhcontactus@gmail.com",
             to: email,
