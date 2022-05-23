@@ -7,6 +7,7 @@ import { DoctorAppointment } from '../classes/doctorAppointment'
 import { CreateAppointmentDto } from '../dto/createAppointmentDto';
 import { DeleteAppointDto } from '../dto/deleteAppointDto';
 import * as loki from 'lokijs'
+import { Console } from 'console';
 
 
 @Injectable()
@@ -52,23 +53,20 @@ export class AppointmentsService {
         const appointmentsTable = this.db.getCollection('appointments')
         const appoints: DoctorAppointment[] = appointmentsTable.find({ doctorId: parseInt(id) })
         const patientTable = this.db.getCollection('patients')
-        try {
-            if (appoints) {
-                return appoints.map(appoint => {
-                    this.logger.log(`Showing appointments from doctor ${id}`)
-                    return new DoctorAppointment(
-                        appoint.id,
-                        appoint.doctorId,
-                        appoint.patientId,
-                        patientTable.findOne({ id: appoint.patientId }).name,
-                        appoint.pickedDate
-                    )
-                })
-            } else {
-                this.logger.log(`The doctor ${id} has no appointments `)
-            }
-        } catch (err) {
-            this.logger.error('Internal Server Error', err)
+        if (appoints) {
+            return appoints.map(appoint => {
+                this.logger.log(`Showing appointments from doctor ${id}`)
+                return new DoctorAppointment(
+                    appoint.id,
+                    appoint.doctorId,
+                    appoint.patientId,
+                    patientTable.findOne({ id: appoint.patientId }).name,
+                    appoint.pickedDate
+                )
+            })
+        } else {
+            this.logger.log(`The doctor ${id} has no appointments `)
+            return []
         }
     }
 
@@ -77,10 +75,6 @@ export class AppointmentsService {
         const doctorTable = this.db.getCollection('doctors')
         const docId = typeof createAppDto.doctor === "string" ? parseInt(createAppDto.doctor) : createAppDto.doctor;
         const doctor: Doctor = doctorTable.findOne({ id: docId })
-
-        this.logger.debug('service')
-        this.logger.debug(patient)
-        this.logger.debug(doctor)
         if (patient && doctor) {
             const appointmentsTable = this.db.getCollection('appointments')
             const newId: number = this.appointmentId++

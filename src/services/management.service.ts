@@ -21,6 +21,4 @@ export class ManagementService {
         })
         return true
     }
-
-
 }

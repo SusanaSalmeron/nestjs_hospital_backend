@@ -1,40 +1,97 @@
+
+[![CircleCI](https://img.shields.io/circleci/build/github/SusanaSalmeron/nestjs_hospital_backend/develop)](https://app.circleci.com/pipelines/github/SusanaSalmeron/nestjs_hospital_backend)
+
+<div align="center">
+<h3 align="center">API REST Hospital Management</h3>
 <p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
-</p>
+    Hospital administration. Sign up and register. Patient search, see and add clinical records for doctors. Appointments for patients.
+    <br />
+    <a href="https://github.com/SusanaSalmeron/hospital_backend"><strong>Explore the docs »</strong></a>
+    <br />
+    <br />
+    <a href="https://github.com/SusanaSalmeron/hospital_backend/issues">Report Bug</a>
+    ·
+    <a href="https://github.com/SusanaSalmeron/hospital_backend/issues">Request Feature</a>
+  </p>
+</div>
+<details>
+  <summary>Table of Contents</summary>
+  <ol>
+    <li>
+      <a href="#about-the-project">About The Project</a>
+      <ul>
+        <li><a href="#built-with">Built With</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#getting-started">Getting Started</a>
+      <ul>
+        <li><a href="#prerequisites">Prerequisites</a></li>
+        <li><a href="#installation">Installation</a></li>
+      </ul>
+    </li>
+    <li><a href="#usage">Usage</a></li>
+    <li><a href="#license">License</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="#acknowledgments">Acknowledgments</a></li>
+  </ol>
+</details>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## About The Project
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+This project was created for learning to use this technologies.
 
-## Description
+<p align="right">(<a href="#top">back to top</a>)</p>
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+### Built With
 
-## Installation
+* [Node.js](https://nodejs.org/en/)
+* [Nestjs.js](https://nestjs.com)
+* [Loki.js](http://techfort.github.io/LokiJS/)
+* [Jest.js](https://jestjs.io/)
+* [Jsonwebtoken](https://github.com/auth0/node-jsonwebtoken#readme)
+* [dayjs](https://day.js.org)
+* [nodemailer](https://nodemailer.com/about/)
+* [dotenv](https://github.com/motdotla/dotenv#readme)
 
-```bash
-$ npm install
+
+
+<p align="right">(<a href="#top">back to top</a>)</p>
+
+## Getting Started
+
+### Prerequisites
+You will need installed this technologies:
+
+* Node.js v14.x
+* npm v8.x
+  
+### Installation
+
+
+1. Clone the repo
+   ```sh
+   git clone https://github.com/SusanaSalmeron/nestjs_hospital_backend
+   ```
+2. Install NPM packages
+   ```sh
+   npm install
+   ```
+
+<p align="right">(<a href="#top">back to top</a>)</p>
+
+## Usage
+
+For using this application, it is mandatory to create a file called `.env` at root level with the following content:
+
 ```
+SECRET_TOKEN="your private key"
+```
+With this, the application will be able to generate JWT tokens
 
-## Running the app
-
-```bash
+Next, in the root directory, you can run:
+* To start the project
+```sh
 # development
 $ npm run start
 
@@ -45,29 +102,24 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
-## Test
-
-```bash
+* To run test
+```sh
 # unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+$ npm run test or $ npm run test:watch
 ```
 
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+<p align="right">(<a href="#top">back to top</a>)</p>
 
 ## License
 
-Nest is [MIT licensed](LICENSE).
+Distributed under the MIT License. See `license.txt` for more information.
+
+<p align="right">(<a href="#top">back to top</a>)</p>
+
+## Contact
+
+Susana Salmeron - [@exdream76](https://twitter.com/ExDream76) - exdream76@gmail.com
+
+Project Link: [https://github.com/SusanaSalmeron/nestjs_hospital_backend](https://github.com/SusanaSalmeron/nestjs_hospital_backend)
+
+<p align="right">(<a href="#top">back to top</a>)</p>

@@ -71,7 +71,6 @@ export class PatientsController {
             response.status(HttpStatus.INTERNAL_SERVER_ERROR).send('Internal Server Error', err)
         }
     }
-
     @Put('/:id')
     @ApiBearerAuth('JWT-auth')
     @ApiOkResponse({
@@ -119,7 +118,6 @@ export class PatientsController {
         } catch (err) {
             this.logger.error('Internal Error', err)
             response.status(HttpStatus.INTERNAL_SERVER_ERROR).send('Internal error')
-
         }
     }
 
@@ -139,7 +137,7 @@ export class PatientsController {
             const appointmentId = await this.appointmentsService.createNewAppointment(id, createAppDto)
             if (appointmentId) {
                 this.logger.log('Appointment added successfully')
-                response.status(HttpStatus.CREATED).send()
+                response.status(HttpStatus.CREATED)
             } else {
                 this.logger.error('No Appointment 2')
                 response.status(HttpStatus.NOT_FOUND).json({ error: 'The patient id or the doctor id does not exists' })
@@ -163,7 +161,7 @@ export class PatientsController {
             const appointmentDeleted = await this.appointmentsService.deleteAppointment(deleteAppointDto)
             if (appointmentDeleted) {
                 this.logger.log('Appointment deleted successfully')
-                response.status(HttpStatus.OK).send()
+                response.status(HttpStatus.OK)
             } else {
                 this.logger.error('Appointment does not exists')
                 response.status(HttpStatus.NOT_FOUND).json({ error: 'Appointment does not exists' })
@@ -199,7 +197,6 @@ export class PatientsController {
         }
     }
 
-    //TODO -authorize doctor pending
     @Post('/:id/records')
     @ApiBearerAuth('JWT-auth')
     @ApiBody({
@@ -211,7 +208,7 @@ export class PatientsController {
     @ApiNotFoundResponse({ description: 'Patient not found' })
     @ApiInternalServerErrorResponse({ description: '' })
     @ApiForbiddenResponse({ description: "Current role is not authorized" })
-    async createNewRecord(@Param('id') id: string, @Res() response, @Req() request, @Body() createRecordDto: CreateRecordDto) {
+    async createNewRecord(@Param('id') id: string, @Req() request, @Res() response, @Body() createRecordDto: CreateRecordDto) {
         if (request.role === "sanitario") {
             try {
                 const recordAdded = await this.recordsService.addNewRecord(id, createRecordDto)

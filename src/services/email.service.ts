@@ -1,5 +1,4 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
-import * as loki from 'lokijs';
+import { Injectable, Logger } from '@nestjs/common';
 import * as nodemailer from 'nodemailer';
 
 
@@ -7,7 +6,7 @@ import * as nodemailer from 'nodemailer';
 @Injectable()
 export class EmailService {
     private readonly logger = new Logger(EmailService.name)
-    constructor(@Inject('DATABASE_CONNECTION') private db: loki) { }
+
     private client = null
     async initializeEmailClient() {
         const testAccount = await nodemailer.createTestAccount();
@@ -33,7 +32,7 @@ export class EmailService {
     async sendEmail(email) {
         const emailClient = await this.getEmailClient()
         const info = await emailClient.sendMail({
-            from: "emailhhcontactus@gmai.com",
+            from: "emailhhcontactus@gmail.com",
             to: email,
             subject: "No replay",
             text: "We have received your inquiry. Our team will contact you shortly",

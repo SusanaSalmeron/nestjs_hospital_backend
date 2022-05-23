@@ -27,21 +27,26 @@ export class UsersController {
     async userLogin(@Res() response, @Body() createUserDto: CreateUserDto) {
         const { email, password } = createUserDto
         try {
-            const user = await this.usersService.findUserByEmail(email)
+            const user = await this.usersService.findUserByEmail
+                (email)
             if (!user) {
                 this.logger.error('User not found')
-                response.status(HttpStatus.NOT_FOUND).json({ error: "User not found" })
+                response.status(HttpStatus.NOT_FOUND)
+                response.json({ error: "User not found" })
             } else if (password === user.password) {
                 this.logger.debug('Login successfully')
                 const token = await this.tokenService.createToken(user)
-                response.status(HttpStatus.OK).json({ name: user.name, id: user.id, token: token })
+                response.status(HttpStatus.OK)
+                response.json({ name: user.name, id: user.id, token: token })
             } else {
                 this.logger.error('Password or/and email error')
-                response.status(HttpStatus.UNAUTHORIZED).json({ error: 'Password or/and email error' })
+                response.status(HttpStatus.UNAUTHORIZED)
+                response.json({ error: 'Password or/and email error' })
             }
         } catch (err) {
             this.logger.error('Internal Server Error', err)
-            response.status(HttpStatus.INTERNAL_SERVER_ERROR).json('Internal Server Error')
+            response.status(HttpStatus.INTERNAL_SERVER_ERROR)
+            response.json('Internal Server Error')
         }
     }
 
