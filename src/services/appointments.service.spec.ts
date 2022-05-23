@@ -6,7 +6,7 @@ import { Patient } from '../classes/patient';
 import { CreateAppointmentDto } from 'src/dto/createAppointmentDto';
 import { DeleteAppointDto } from 'src/dto/deleteAppointDto';
 
-//TODO test not working properly
+
 describe('AppointmentsService', () => {
   let appointmentsService: AppointmentsService;
   let spyPatientsService: PatientsService;
