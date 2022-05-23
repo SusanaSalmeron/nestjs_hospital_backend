@@ -48,6 +48,7 @@ export class PatientsService {
                     patient.diagnostics
                 )
             })
+
             return patientsDiagnostics
         }
         let otherPatients = []
@@ -99,6 +100,7 @@ export class PatientsService {
             )
         } else {
             this.logger.log('No patient with this id')
+            return null
         }
     }
 
