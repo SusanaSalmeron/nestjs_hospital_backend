@@ -12,6 +12,7 @@ export class UsersService {
     async findUserByEmail(email: string): Promise<User> {
         const userTable = this.db.getCollection('users')
         const foundUser: User = userTable.findOne({ email: email })
+
         if (foundUser) {
             return new User(
                 foundUser.name,

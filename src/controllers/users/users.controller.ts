@@ -30,25 +30,23 @@ export class UsersController {
         try {
             const user = await this.usersService.findUserByEmail
                 (email)
-            const match = await bcrypt.compare(password, user.password)
             if (!user) {
                 this.logger.error('User not found')
-                response.status(HttpStatus.NOT_FOUND)
-                response.json({ error: "User not found" })
-            } else if (match) {
-                this.logger.debug('Login successfully')
-                const token = await this.tokenService.createToken(user)
-                response.status(HttpStatus.OK)
-                response.json({ name: user.name, id: user.id, token: token })
+                response.status(HttpStatus.NOT_FOUND).json({ error: "User not found" })
             } else {
-                this.logger.error('Password or/and email error')
-                response.status(HttpStatus.UNAUTHORIZED)
-                response.json({ error: 'Password or/and email error' })
+                const match = await bcrypt.compare(password, user.password)
+                if (match) {
+                    this.logger.debug('Login successfully')
+                    const token = await this.tokenService.createToken(user)
+                    response.status(HttpStatus.OK).json({ name: user.name, id: user.id, token: token })
+                } else {
+                    this.logger.error('Password or/and email error')
+                    response.status(HttpStatus.UNAUTHORIZED).json({ error: 'Password or/and email error' })
+                }
             }
         } catch (err) {
             this.logger.error('Internal Server Error', err)
-            response.status(HttpStatus.INTERNAL_SERVER_ERROR)
-            response.json('Internal Server Error')
+            response.status(HttpStatus.INTERNAL_SERVER_ERROR).json('Internal Server Error')
         }
     }
 
