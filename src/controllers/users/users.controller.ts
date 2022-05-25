@@ -7,6 +7,7 @@ import { UsersService } from '../../services/users.service';
 import { TokenService } from '../../services/token.service';
 import { PatientsService } from '../../services/patients.service';
 import { ValidationService } from '../../services/validation.service';
+import * as bcrypt from 'bcrypt';
 
 
 @Controller('users')
@@ -29,11 +30,12 @@ export class UsersController {
         try {
             const user = await this.usersService.findUserByEmail
                 (email)
+            const match = await bcrypt.compare(password, user.password)
             if (!user) {
                 this.logger.error('User not found')
                 response.status(HttpStatus.NOT_FOUND)
                 response.json({ error: "User not found" })
-            } else if (password === user.password) {
+            } else if (match) {
                 this.logger.debug('Login successfully')
                 const token = await this.tokenService.createToken(user)
                 response.status(HttpStatus.OK)
