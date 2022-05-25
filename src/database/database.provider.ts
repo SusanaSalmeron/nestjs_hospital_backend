@@ -1,6 +1,24 @@
-import * as loki from 'lokijs';
+/* import { Logger } from '@nestjs/common';
+ */import * as loki from 'lokijs';
 import * as fs from 'fs';
 import * as path from 'path';
+import * as bcrypt from 'bcrypt';
+
+
+async function passwordEncrypt(data) {
+    const allPromises = data.map(async d => {
+        const saltRounds = 10
+        const hash = await bcrypt.hash(d.password, saltRounds)
+        return {
+            name: d.name,
+            email: d.email,
+            password: hash,
+            role: d.role,
+            id: d.id
+        }
+    })
+    return await Promise.all(allPromises)
+}
 
 export const databaseProviders = [
     {
@@ -9,21 +27,24 @@ export const databaseProviders = [
             try {
                 const client = await new loki('hospital.db')
                 const tables = ['users', 'patients', 'doctors', 'clinicalRecords', 'appointments', 'diseases', 'contactUs']
-                tables.forEach(tableName => {
-                    const rawdata = fs.readFileSync(path.resolve(__dirname, 'data', `${tableName}.json`));
+                for (let i = 0; i < tables.length; i++) {
+                    const rawdata = fs.readFileSync(path.resolve(__dirname, 'data', `${tables[i]}.json`));
                     let data = JSON.parse(rawdata.toString());
-                    if (tableName == 'diseases') {
+                    if (tables[i] === 'diseases') {
                         data = data.map(d => {
                             return {
                                 name: d
                             }
                         })
+                    } if (tables[i] === 'users') {
+                        data = await passwordEncrypt(data)
                     }
-                    const table = client.addCollection(tableName);
+                    const table = client.addCollection(tables[i]);
                     table.insert(data)
-                })
-                /*  const pt = client.getCollection('contactUs')
-                 Logger.debug(JSON.stringify(pt.find(true))) */
+                }
+                /* const pt = client.getCollection('users')
+                console.log(pt)
+                Logger.log(JSON.stringify(pt.find(true))) */
                 return client;
             } catch (error) {
                 throw error;
